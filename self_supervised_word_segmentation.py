@@ -44,7 +44,7 @@ def download(i):
 text = ""
 max_threads = 10
 
-for i in tqdm(range(0, 200, max_threads)):
+for i in tqdm(range(0, 100, max_threads)):
   threads = []
   for j in range(i, i + max_threads):
     threads.append(threading.Thread(target = download, args = (i,)))
