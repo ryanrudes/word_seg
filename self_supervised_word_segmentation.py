@@ -29,6 +29,12 @@ from tensorflow.keras.optimizers import *
 from tensorflow.keras.utils import to_categorical
 import tensorflow as tf
 
+resolver = tf.distribute.cluster_resolver.TPUClusterResolver(tpu = "ryanrudes")
+tf.config.experimental_connect_to_cluster(resolver)
+# This is the TPU initialization code that has to be at the beginning.
+tf.tpu.experimental.initialize_tpu_system(resolver)
+print("All devices: ", tf.config.list_logical_devices('TPU'))
+
 def download(i):
   global text
   r = requests.get("https://www.gutenberg.org/files/{}/{}-0.txt".format(i, i))
