@@ -116,12 +116,6 @@ model.summary()
 
 model.compile(optimizer = "adam", loss = "mean_squared_error")
 
-def train_on_batch(x, y):
-  global epoch_wise_losses
-  with strategy.scope():
-    loss = model.train_on_batch(x, y)
-  epoch_wise_losses.append(loss)
-
 losses = []
 
 for epoch in range(100):
@@ -135,7 +129,9 @@ for epoch in range(100):
   amount = (len(x_train) // batch_size)
   threads = []
   for x, y in zip(tqdm(x_train[:amount * batch_size].reshape((amount, len(x_train) // amount, 100, 26))), y_train[:amount * batch_size].reshape((amount, len(y_train) // amount, 100))):
-    train_on_batch(x, y)
+    loss = model.train_on_batch(x, y)
+    
+  epoch_wise_losses.append(loss)
 
   mean_loss = np.mean(epoch_wise_losses)
   losses.append(mean_loss)
