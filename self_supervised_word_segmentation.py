@@ -34,7 +34,7 @@ tf.config.experimental_connect_to_cluster(resolver)
 # This is the TPU initialization code that has to be at the beginning.
 tf.tpu.experimental.initialize_tpu_system(resolver)
 print("All devices: ", tf.config.list_logical_devices('TPU'))
-mirrored_strategy = tf.distribute.MirroredStrategy()
+strategy = tf.distribute.experimental.TPUStrategy(resolver)
 
 def download(i):
   global text
@@ -118,7 +118,7 @@ model.compile(optimizer = "adam", loss = "mean_squared_error")
 
 def train_on_batch(x, y):
   global epoch_wise_losses
-  with mirrored_strategy.scope():
+  with strategy.scope():
     loss = model.train_on_batch(x, y)
   epoch_wise_losses.append(loss)
 
