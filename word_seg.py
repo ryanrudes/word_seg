@@ -29,13 +29,6 @@ from tensorflow.keras.optimizers import *
 from tensorflow.keras.utils import to_categorical
 import tensorflow as tf
 
-resolver = tf.distribute.cluster_resolver.TPUClusterResolver(tpu = "ryanrudes")
-tf.config.experimental_connect_to_cluster(resolver)
-# This is the TPU initialization code that has to be at the beginning.
-tf.tpu.experimental.initialize_tpu_system(resolver)
-print("All devices: ", tf.config.list_logical_devices('TPU'))
-strategy = tf.distribute.experimental.TPUStrategy(resolver)
-
 def download(i):
   global text
   r = requests.get("https://www.gutenberg.org/files/{}/{}-0.txt".format(i, i))
@@ -45,7 +38,7 @@ def download(i):
 text = ""
 max_threads = 10
 
-for i in tqdm(range(0, 100, max_threads)):
+for i in tqdm(range(0, sys.argv[1], max_threads)):
   threads = []
   for j in range(i, i + max_threads):
     threads.append(threading.Thread(target = download, args = (i,)))
