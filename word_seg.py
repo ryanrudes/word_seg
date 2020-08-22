@@ -42,7 +42,7 @@ num_concurrent_threads = int(num_concurrent_threads)
 
 for i in tqdm(range(0, num_books, num_concurrent_threads)):
   threads = []
-  for j in range(i, i + max_threads):
+  for j in range(i, i + num_concurrent_threads):
     threads.append(threading.Thread(target = download, args = (i,)))
 
   for thread in threads:
