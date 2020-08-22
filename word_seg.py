@@ -35,9 +35,11 @@ def download(i):
     text = text + str(r.content) + " "
 
 text = ""
-max_threads = 10
+num_books, num_concurrent_threads = sys.argv[1:3]
+num_books = int(num_books)
+num_concurrent_threads = int(num_concurrent_threads)
 
-for i in tqdm(range(0, sys.argv[1], max_threads)):
+for i in tqdm(range(0, num_books, num_concurrent_threads)):
   threads = []
   for j in range(i, i + max_threads):
     threads.append(threading.Thread(target = download, args = (i,)))
